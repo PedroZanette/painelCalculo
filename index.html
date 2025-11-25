@@ -214,4 +214,70 @@
                 </li>
             </ul>
         </div>
-    </sec
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="text-center mt-10 p-4 text-gray-500 text-sm border-t">
+        Trabalho de Cálculo I - UniSENAI Florianópolis · 2025
+    </footer>
+
+    <!-- SCRIPT DO BOTÃO -->
+    <script>
+        // Dados do exemplo (FPR, TPR)
+        const data = [
+            { fpr: 0.0, tpr: 0.0, label: 'P0' },
+            { fpr: 0.2, tpr: 0.5, label: 'P1' },
+            { fpr: 0.4, tpr: 0.7, label: 'P2' },
+            { fpr: 1.0, tpr: 1.0, label: 'P3' }
+        ];
+
+        let currentStep = 0;
+        let totalAUC = 0;
+
+        function nextStep() {
+            const stepsContainer = document.getElementById('calculation-steps');
+            const nextStepBtn = document.getElementById('next-step-btn');
+            const aucResultSpan = document.getElementById('auc-result');
+            const finalInterpretationDiv = document.getElementById('final-interpretation');
+            const aucFinalSpan = document.getElementById('auc-final');
+
+            if (currentStep >= data.length - 1) {
+                // já terminou todos os trapézios
+                nextStepBtn.disabled = true;
+                nextStepBtn.textContent = 'Fim do Cálculo';
+                nextStepBtn.classList.add('opacity-50');
+                finalInterpretationDiv.classList.remove('hidden');
+                aucFinalSpan.textContent = totalAUC.toFixed(2);
+                return;
+            }
+
+            const P1 = data[currentStep];
+            const P2 = data[currentStep + 1];
+
+            const area = ((P1.tpr + P2.tpr) / 2) * (P2.fpr - P1.fpr);
+            totalAUC += area;
+
+            const stepHtml = `
+                <div class="bg-blue-100 p-3 rounded-lg border border-blue-300">
+                    <strong class="text-blue-800">Passo ${currentStep + 1} (Trapézio de ${P1.label} a ${P2.label}):</strong>
+                    <p class="math-text mt-1">
+                        Área = (( ${P1.tpr} + ${P2.tpr} ) / 2) × (${P2.fpr} − ${P1.fpr}) = 
+                        <strong>${area.toFixed(2)}</strong>
+                    </p>
+                </div>
+            `;
+            
+            stepsContainer.insertAdjacentHTML('beforeend', stepHtml);
+            
+            aucResultSpan.textContent = totalAUC.toFixed(2);
+
+            currentStep++;
+
+            if (currentStep === data.length - 1) {
+                nextStepBtn.textContent = 'Calcular Resultado Final';
+            }
+        }
+    </script>
+
+</body>
+</html>

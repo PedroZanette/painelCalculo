@@ -141,7 +141,6 @@
                     O modelo da direita tem AUC maior (≈0.93), indicando excelente desempenho global.
                 </p>
             </div>
-
         </div>
 
         <!-- 2.4 – SUA PARTE -->
@@ -212,6 +211,73 @@
             </table>
         </div>
 
+        <!-- 🔹 SIMULADOR DE AUC + GRÁFICO -->
+        <div class="bg-white p-6 rounded-lg shadow-inner mb-6">
+            <h4 class="text-xl font-bold text-blue-700 mb-4">Simulador: Ajuste os valores de TPR e veja a AUC e a curva ROC</h4>
+            <p class="text-gray-700 mb-4">
+                Modifique os valores de TPR para cada ponto (mantendo entre 0 e 1) e clique em
+                <strong>"Calcular AUC do simulador"</strong> para ver como a área sob a curva e a curva ROC mudam.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        TPR em FPR = 0.2 (P1)
+                    </label>
+                    <input id="tpr1" type="number" min="0" max="1" step="0.01" value="0.5"
+                        class="w-full border rounded-md px-3 py-2 text-gray-700">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        TPR em FPR = 0.4 (P2)
+                    </label>
+                    <input id="tpr2" type="number" min="0" max="1" step="0.01" value="0.7"
+                        class="w-full border rounded-md px-3 py-2 text-gray-700">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        TPR em FPR = 1.0 (P3)
+                    </label>
+                    <input id="tpr3" type="number" min="0" max="1" step="0.01" value="1.0"
+                        class="w-full border rounded-md px-3 py-2 text-gray-700">
+                </div>
+            </div>
+
+            <!-- Gráfico ROC -->
+            <div class="mt-6">
+                <svg id="roc-chart" viewBox="0 0 100 100"
+                    class="w-full max-w-md mx-auto bg-gray-50 border rounded-md">
+                    <!-- Eixos -->
+                    <line x1="10" y1="90" x2="90" y2="90" stroke="#000" stroke-width="0.8"></line>
+                    <line x1="10" y1="90" x2="10" y2="10" stroke="#000" stroke-width="0.8"></line>
+
+                    <!-- Diagonal (modelo aleatório) -->
+                    <polyline id="roc-diagonal" points="10,90 90,10" stroke="#9ca3af" stroke-width="0.8"
+                        fill="none" stroke-dasharray="3,3"></polyline>
+
+                    <!-- Curva ROC simulada -->
+                    <polyline id="roc-curve" points="" stroke="#2563eb" stroke-width="1.8" fill="rgba(129, 199, 245, 0.4)"></polyline>
+
+                    <!-- Rótulos -->
+                    <text x="50" y="98" font-size="5" text-anchor="middle">FPR</text>
+                    <text x="4" y="50" font-size="5" text-anchor="middle" transform="rotate(-90 4 50)">TPR</text>
+                </svg>
+                <p class="text-center text-sm text-gray-500 mt-2">
+                    Curva ROC aproximada para os valores de TPR escolhidos. A área sob essa curva é a AUC.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+                <button onclick="simulateAUC()"
+                    class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-md">
+                    Calcular AUC do simulador
+                </button>
+                <div class="text-xl font-extrabold text-blue-800">
+                    AUC (simulador): <span id="sim-auc-result" class="text-purple-600">0.68</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Área de Cálculo Interativo -->
         <div class="bg-white p-6 rounded-lg shadow-inner">
             <h4 class="text-xl font-bold text-blue-700 mb-4">Cálculo Interativo (Passo a Passo)</h4>
@@ -276,9 +342,9 @@
         Trabalho de Cálculo I - UniSENAI Florianópolis · 2025
     </footer>
 
-    <!-- SCRIPT DO BOTÃO -->
+    <!-- SCRIPT -->
     <script>
-        // Dados do exemplo (FPR, TPR)
+        // Dados do exemplo (FPR, TPR) – para o passo a passo
         const data = [
             { fpr: 0.0, tpr: 0.0, label: 'P0' },
             { fpr: 0.2, tpr: 0.5, label: 'P1' },
@@ -330,6 +396,52 @@
                 nextStepBtn.textContent = 'Calcular Resultado Final';
             }
         }
+
+        // Desenha a curva ROC no SVG
+        function drawROC(points) {
+            const curve = document.getElementById('roc-curve');
+            if (!curve) return;
+
+            // Converte FPR (x) e TPR (y) para coordenadas do SVG (10–90)
+            const svgPoints = points.map(p => {
+                const x = 10 + p.fpr * 80;           // 0→10, 1→90
+                const y = 90 - p.tpr * 80;           // 0→90, 1→10 (invertido)
+                return `${x},${y}`;
+            }).join(' ');
+
+            curve.setAttribute('points', svgPoints);
+        }
+
+        // Simulador de AUC (usando os mesmos FPRs e TPRs editáveis)
+        function simulateAUC() {
+            const tpr1 = parseFloat(document.getElementById('tpr1').value) || 0;
+            const tpr2 = parseFloat(document.getElementById('tpr2').value) || 0;
+            const tpr3 = parseFloat(document.getElementById('tpr3').value) || 0;
+
+            const points = [
+                { fpr: 0.0, tpr: 0.0 },
+                { fpr: 0.2, tpr: Math.min(Math.max(tpr1, 0), 1) },
+                { fpr: 0.4, tpr: Math.min(Math.max(tpr2, 0), 1) },
+                { fpr: 1.0, tpr: Math.min(Math.max(tpr3, 0), 1) }
+            ];
+
+            let auc = 0;
+            for (let i = 0; i < points.length - 1; i++) {
+                const A = points[i];
+                const B = points[i + 1];
+                auc += ((A.tpr + B.tpr) / 2) * (B.fpr - A.fpr);
+            }
+
+            document.getElementById('sim-auc-result').textContent = auc.toFixed(2);
+
+            // Atualiza o gráfico ROC
+            drawROC(points);
+        }
+
+        // Desenha a curva inicial quando a página carrega
+        window.onload = function () {
+            simulateAUC();
+        };
     </script>
 
 </body>

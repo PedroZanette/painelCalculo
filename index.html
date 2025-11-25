@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +11,22 @@
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background-color: #f7f9fb;
         }
+
         .panel-section {
             padding: 2.5rem;
             margin-bottom: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease-in-out;
         }
+
         .panel-section:hover {
             transform: translateY(-5px);
         }
+
         .formula {
-            background-color: #e0f2fe; /* azul claro */
+            background-color: #e0f2fe;
             padding: 1rem;
             border-left: 4px solid #007bff;
             border-radius: 0.5rem;
@@ -29,17 +34,21 @@
             font-size: 1.1rem;
             color: #1e40af;
         }
+
         .math-text {
             font-family: "Times New Roman", serif;
         }
+
         .step-button {
             transition: all 0.3s;
         }
+
         .step-button:hover {
             transform: scale(1.05);
         }
     </style>
 </head>
+
 <body class="p-6 md:p-10">
 
     <!-- Cabeçalho Principal (Capa) -->
@@ -63,9 +72,12 @@
         </h3>
         <p class="text-gray-700 text-lg leading-relaxed">
             A integral, com sua interpretação clássica de <strong>área sob a curva</strong>, torna-se uma ferramenta
-            importante para quantificar grandezas acumuladas. Na avaliação de modelos de classificação em Inteligência Artificial,
-            a métrica <strong>AUC-ROC</strong> (Área Sob a Curva ROC) utiliza esse conceito para resumir, em um único número,
-            o desempenho geral de um classificador ao longo de <strong>todos os limiares de decisão possíveis</strong>, sem ficar
+            importante para quantificar grandezas acumuladas. Na avaliação de modelos de classificação em Inteligência
+            Artificial,
+            a métrica <strong>AUC-ROC</strong> (Área Sob a Curva ROC) utiliza esse conceito para resumir, em um único
+            número,
+            o desempenho geral de um classificador ao longo de <strong>todos os limiares de decisão possíveis</strong>,
+            sem ficar
             preso a um único ponto de corte.
         </p>
     </section>
@@ -102,7 +114,7 @@
                 tende a produzir uma curva próxima da diagonal, com AUC perto de 0,5.
             </p>
         </div>
-        
+
         <div class="mb-8">
             <h4 class="text-2xl font-semibold text-gray-800 mb-3">2.2. A Definição Matemática da AUC</h4>
             <p class="text-gray-700">
@@ -122,12 +134,41 @@
         <div class="mb-8">
             <h4 class="text-2xl font-semibold text-gray-800 mb-3">2.3. Visualização Conceitual da Curva</h4>
             <div class="bg-gray-100 p-6 rounded-lg text-center border-2 border-dashed border-gray-400">
-                <p class="text-gray-600 font-semibold mb-2">Representação Gráfica da Curva ROC e AUC</p>
-                <p class="text-sm mt-2">
-                    A área sombreada sob a curva ROC (AUC) é exatamente o valor que a integral calcula.
-                    Essa área indica quão bem o modelo separa as classes positiva e negativa.
+                <p class="text-gray-600 font-semibold mb-4">Comparação visual entre dois modelos usando AUC</p>
+                <img src="areaCalculo.webp" class="mx-auto rounded-lg shadow-md" style="max-width: 400px;">
+                <p class="text-sm mt-4 text-gray-700">
+                    O modelo da esquerda tem AUC menor (≈0.65), indicando separação ruim entre as classes.
+                    O modelo da direita tem AUC maior (≈0.93), indicando excelente desempenho global.
                 </p>
             </div>
+
+        </div>
+
+        <!-- 2.4 – SUA PARTE -->
+        <div class="mb-8 bg-blue-50 p-6 rounded-xl border-l-4 border-blue-600">
+            <h4 class="text-2xl font-bold text-blue-700 mb-3">2.4. Aplicações da AUC em Sistemas Inteligentes</h4>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                A métrica AUC é muito usada na prática porque ela avalia o modelo em todos os limiares possíveis, sem
+                ficar presa a
+                uma escolha específica. Isso é especialmente importante em aplicações reais de Inteligência Artificial,
+                onde o custo
+                de errar pode ser diferente para cada tipo de erro.
+            </p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li><strong>Diagnóstico médico:</strong> comparar modelos que detectam doenças, evitando falsos
+                    negativos perigosos.</li>
+                <li><strong>Detecção de fraude:</strong> identificar transações suspeitas sem bloquear clientes
+                    legítimos o tempo todo.</li>
+                <li><strong>Filtros de spam:</strong> separar mensagens indesejadas sem jogar e-mails importantes na
+                    caixa de spam.</li>
+                <li><strong>Sistemas de alerta:</strong> priorizar alertas em monitoramento de segurança ou falhas em
+                    sistemas.</li>
+            </ul>
+            <p class="mt-4 text-gray-700">
+                Nessas situações, a AUC ajuda a escolher o modelo que consegue equilibrar melhor acertos e erros,
+                mostrando como
+                o cálculo integral aparece diretamente em decisões do dia a dia em Ciência de Dados e IA.
+            </p>
         </div>
     </section>
 
@@ -140,7 +181,7 @@
             Na prática, a curva ROC é obtida a partir de pontos discretos. Assim, a integral é aproximada usando a
             <strong>Regra do Trapézio</strong>. Vamos calcular a AUC de um exemplo simples com os seguintes pontos:
         </p>
-        
+
         <!-- Tabela de Dados -->
         <div class="flex justify-center mb-6">
             <table class="w-full md:w-1/2 bg-white border border-gray-300 rounded-lg overflow-hidden">
@@ -151,10 +192,22 @@
                     </tr>
                 </thead>
                 <tbody class="text-center text-gray-800">
-                    <tr><td class="py-2 px-4 border-r">0.0 (P0)</td><td class="py-2 px-4">0.0</td></tr>
-                    <tr><td class="py-2 px-4 border-r">0.2 (P1)</td><td class="py-2 px-4">0.5</td></tr>
-                    <tr><td class="py-2 px-4 border-r">0.4 (P2)</td><td class="py-2 px-4">0.7</td></tr>
-                    <tr><td class="py-2 px-4 border-r">1.0 (P3)</td><td class="py-2 px-4">1.0</td></tr>
+                    <tr>
+                        <td class="py-2 px-4 border-r">0.0 (P0)</td>
+                        <td class="py-2 px-4">0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-r">0.2 (P1)</td>
+                        <td class="py-2 px-4">0.5</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-r">0.4 (P2)</td>
+                        <td class="py-2 px-4">0.7</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-r">1.0 (P3)</td>
+                        <td class="py-2 px-4">1.0</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -162,10 +215,11 @@
         <!-- Área de Cálculo Interativo -->
         <div class="bg-white p-6 rounded-lg shadow-inner">
             <h4 class="text-xl font-bold text-blue-700 mb-4">Cálculo Interativo (Passo a Passo)</h4>
-            
+
             <div id="calculation-steps" class="space-y-3 mb-4">
                 <p class="text-gray-500">
-                    Clique em <strong>"Próximo Passo"</strong> para ver o cálculo da área de cada trapézio e a formação da AUC.
+                    Clique em <strong>"Próximo Passo"</strong> para ver o cálculo da área de cada trapézio e a formação
+                    da AUC.
                 </p>
             </div>
 
@@ -178,11 +232,11 @@
                     AUC Total: <span id="auc-result" class="text-red-600">0.00</span>
                 </div>
             </div>
-            
-            <p id="final-interpretation"
-               class="mt-4 text-center text-lg font-semibold text-gray-700 hidden">
+
+            <p id="final-interpretation" class="mt-4 text-center text-lg font-semibold text-gray-700 hidden">
                 Interpretação: O valor AUC de <span id="auc-final" class="font-extrabold text-red-600">0.00</span>
-                indica um modelo com desempenho <strong>razoável</strong>, melhor que o acaso, mas ainda longe de um modelo excelente.
+                indica um modelo com desempenho <strong>razoável</strong>, melhor que o acaso, mas ainda longe de um
+                modelo excelente.
             </p>
         </div>
     </section>
@@ -193,7 +247,8 @@
             4. CONCLUSÃO: O Impacto Prático
         </h3>
         <p class="text-gray-700 text-lg leading-relaxed mb-4">
-            A AUC-ROC mostra como o <strong>Cálculo Integral</strong> está diretamente ligado à prática da Ciência de Dados
+            A AUC-ROC mostra como o <strong>Cálculo Integral</strong> está diretamente ligado à prática da Ciência de
+            Dados
             e da Inteligência Artificial. Em vez de avaliar um modelo em um único limiar, a integral da curva ROC gera
             uma medida global de desempenho.
         </p>
@@ -242,7 +297,6 @@
             const aucFinalSpan = document.getElementById('auc-final');
 
             if (currentStep >= data.length - 1) {
-                // já terminou todos os trapézios
                 nextStepBtn.disabled = true;
                 nextStepBtn.textContent = 'Fim do Cálculo';
                 nextStepBtn.classList.add('opacity-50');
@@ -261,14 +315,13 @@
                 <div class="bg-blue-100 p-3 rounded-lg border border-blue-300">
                     <strong class="text-blue-800">Passo ${currentStep + 1} (Trapézio de ${P1.label} a ${P2.label}):</strong>
                     <p class="math-text mt-1">
-                        Área = (( ${P1.tpr} + ${P2.tpr} ) / 2) × (${P2.fpr} − ${P1.fpr}) = 
+                        Área = (( ${P1.tpr} + ${P2.tpr} ) / 2) × (${P2.fpr} − ${P1.fpr}) =
                         <strong>${area.toFixed(2)}</strong>
                     </p>
                 </div>
             `;
-            
+
             stepsContainer.insertAdjacentHTML('beforeend', stepHtml);
-            
             aucResultSpan.textContent = totalAUC.toFixed(2);
 
             currentStep++;
@@ -280,4 +333,5 @@
     </script>
 
 </body>
+
 </html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Temático: AUC e Integrais na IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: #f7f9fb;
+        }
+        .panel-section {
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+        }
+        .panel-section:hover {
+            transform: translateY(-5px);
+        }
+        .formula {
+            background-color: #e0f2fe; /* azul claro */
+            padding: 1rem;
+            border-left: 4px solid #007bff;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+            color: #1e40af;
+        }
+        .math-text {
+            font-family: "Times New Roman", serif;
+        }
+        .step-button {
+            transition: all 0.3s;
+        }
+        .step-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10">
+
+    <!-- Cabeçalho Principal (Capa) -->
+    <header class="text-center mb-12 bg-white p-8 rounded-xl shadow-lg border-b-4 border-blue-600">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-800 mb-2">
+            Aplicações de Integrais na Avaliação de Modelos de IA
+        </h1>
+        <h2 class="text-2xl font-semibold text-gray-700 mt-1 mb-4">
+            A Área Sob a Curva ROC (AUC)
+        </h2>
+        <p class="text-lg text-gray-500">Trabalho de Cálculo I — Ciência de Dados e IA (2º Semestre)</p>
+        <div class="text-sm text-gray-400 mt-4">
+            <p>Pedro Henrique, Arthur Kremer, Guilherme Santos, Gabriel Sartori</p>
+        </div>
+    </header>
+
+    <!-- 1. INTRODUÇÃO -->
+    <section class="panel-section bg-white">
+        <h3 class="text-3xl font-bold text-blue-600 mb-4 border-b pb-2">
+            1. INTRODUÇÃO: O Poder Acumulado da Integral
+        </h3>
+        <p class="text-gray-700 text-lg leading-relaxed">
+            A integral, com sua interpretação clássica de <strong>área sob a curva</strong>, torna-se uma ferramenta
+            importante para quantificar grandezas acumuladas. Na avaliação de modelos de classificação em Inteligência Artificial,
+            a métrica <strong>AUC-ROC</strong> (Área Sob a Curva ROC) utiliza esse conceito para resumir, em um único número,
+            o desempenho geral de um classificador ao longo de <strong>todos os limiares de decisão possíveis</strong>, sem ficar
+            preso a um único ponto de corte.
+        </p>
+    </section>
+
+    <!-- 2. DESENVOLVIMENTO: Curva ROC e a Integral -->
+    <section class="panel-section bg-white">
+        <h3 class="text-3xl font-bold text-blue-600 mb-6 border-b pb-2">
+            2. DESENVOLVIMENTO: AUC como Integral
+        </h3>
+
+        <div class="mb-8">
+            <h4 class="text-2xl font-semibold text-gray-800 mb-3">2.1. A Curva ROC e Seus Eixos</h4>
+            <p class="text-gray-700">
+                A curva ROC plota o desempenho de um modelo em diferentes limiares. Ela relaciona:
+            </p>
+            <div class="mt-4 grid md:grid-cols-2 gap-4">
+                <div class="formula">
+                    <strong class="text-blue-900">Eixo Vertical (TPR - Sensibilidade):</strong>
+                    Taxa de Verdadeiros Positivos (quão bem o modelo acerta a classe positiva).
+                    <p class="math-text mt-2">
+                        TPR = TP / (TP + FN)
+                    </p>
+                </div>
+                <div class="formula">
+                    <strong class="text-blue-900">Eixo Horizontal (FPR - 1 - Especificidade):</strong>
+                    Taxa de Falsos Positivos (frequência com que o modelo erra a classe negativa).
+                    <p class="math-text mt-2">
+                        FPR = FP / (FP + TN)
+                    </p>
+                </div>
+            </div>
+            <p class="text-gray-700 mt-4">
+                Um modelo ideal se aproxima do canto superior esquerdo (TPR = 1, FPR = 0). Já um modelo aleatório
+                tende a produzir uma curva próxima da diagonal, com AUC perto de 0,5.
+            </p>
+        </div>
+        
+        <div class="mb-8">
+            <h4 class="text-2xl font-semibold text-gray-800 mb-3">2.2. A Definição Matemática da AUC</h4>
+            <p class="text-gray-700">
+                A AUC é a área sob essa curva, calculada pela integral definida de 0 a 1 em relação ao FPR:
+            </p>
+            <div class="formula bg-yellow-100 border-yellow-500">
+                <p class="math-text text-center text-yellow-800 font-bold text-2xl">
+                    AUC = ∫<sub>0</sub><sup>1</sup> TPR(FPR) · d(FPR)
+                </p>
+            </div>
+            <p class="text-gray-700 mt-4">
+                A integral faz uma <strong>soma contínua</strong> da taxa de verdadeiros positivos ao longo de todas
+                as possíveis taxas de falsos positivos, capturando o desempenho global do classificador.
+            </p>
+        </div>
+
+        <div class="mb-8">
+            <h4 class="text-2xl font-semibold text-gray-800 mb-3">2.3. Visualização Conceitual da Curva</h4>
+            <div class="bg-gray-100 p-6 rounded-lg text-center border-2 border-dashed border-gray-400">
+                <p class="text-gray-600 font-semibold mb-2">Representação Gráfica da Curva ROC e AUC</p>
+                <p class="text-sm mt-2">
+                    A área sombreada sob a curva ROC (AUC) é exatamente o valor que a integral calcula.
+                    Essa área indica quão bem o modelo separa as classes positiva e negativa.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. EXEMPLO NUMÉRICO INTERATIVO (Regra do Trapézio) -->
+    <section class="panel-section bg-blue-50">
+        <h3 class="text-3xl font-bold text-blue-600 mb-6 border-b pb-2">
+            3. EXEMPLO NUMÉRICO: Aproximação por Trapézios
+        </h3>
+        <p class="text-gray-700 mb-4">
+            Na prática, a curva ROC é obtida a partir de pontos discretos. Assim, a integral é aproximada usando a
+            <strong>Regra do Trapézio</strong>. Vamos calcular a AUC de um exemplo simples com os seguintes pontos:
+        </p>
+        
+        <!-- Tabela de Dados -->
+        <div class="flex justify-center mb-6">
+            <table class="w-full md:w-1/2 bg-white border border-gray-300 rounded-lg overflow-hidden">
+                <thead class="bg-blue-200 text-blue-900">
+                    <tr>
+                        <th class="py-2 px-4 border-r">FPR (x)</th>
+                        <th class="py-2 px-4">TPR (y)</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center text-gray-800">
+                    <tr><td class="py-2 px-4 border-r">0.0 (P0)</td><td class="py-2 px-4">0.0</td></tr>
+                    <tr><td class="py-2 px-4 border-r">0.2 (P1)</td><td class="py-2 px-4">0.5</td></tr>
+                    <tr><td class="py-2 px-4 border-r">0.4 (P2)</td><td class="py-2 px-4">0.7</td></tr>
+                    <tr><td class="py-2 px-4 border-r">1.0 (P3)</td><td class="py-2 px-4">1.0</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Área de Cálculo Interativo -->
+        <div class="bg-white p-6 rounded-lg shadow-inner">
+            <h4 class="text-xl font-bold text-blue-700 mb-4">Cálculo Interativo (Passo a Passo)</h4>
+            
+            <div id="calculation-steps" class="space-y-3 mb-4">
+                <p class="text-gray-500">
+                    Clique em <strong>"Próximo Passo"</strong> para ver o cálculo da área de cada trapézio e a formação da AUC.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+                <button onclick="nextStep()" id="next-step-btn"
+                    class="step-button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full shadow-md disabled:opacity-50">
+                    Próximo Passo
+                </button>
+                <div class="text-2xl font-extrabold text-blue-800">
+                    AUC Total: <span id="auc-result" class="text-red-600">0.00</span>
+                </div>
+            </div>
+            
+            <p id="final-interpretation"
+               class="mt-4 text-center text-lg font-semibold text-gray-700 hidden">
+                Interpretação: O valor AUC de <span id="auc-final" class="font-extrabold text-red-600">0.00</span>
+                indica um modelo com desempenho <strong>razoável</strong>, melhor que o acaso, mas ainda longe de um modelo excelente.
+            </p>
+        </div>
+    </section>
+
+    <!-- 4. CONCLUSÃO -->
+    <section class="panel-section bg-white">
+        <h3 class="text-3xl font-bold text-blue-600 mb-4 border-b pb-2">
+            4. CONCLUSÃO: O Impacto Prático
+        </h3>
+        <p class="text-gray-700 text-lg leading-relaxed mb-4">
+            A AUC-ROC mostra como o <strong>Cálculo Integral</strong> está diretamente ligado à prática da Ciência de Dados
+            e da Inteligência Artificial. Em vez de avaliar um modelo em um único limiar, a integral da curva ROC gera
+            uma medida global de desempenho.
+        </p>
+        <div class="mt-6 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+            <p class="font-bold text-yellow-800">Aplicações Reais:</p>
+            <ul class="list-disc list-inside text-gray-700 ml-2">
+                <li>
+                    <strong>Diagnóstico médico assistido por IA:</strong>
+                    avaliar se um modelo identifica corretamente casos positivos sem gerar muitos falsos alarmes.
+                </li>
+                <li>
+                    <strong>Sistemas de detecção de fraude:</strong>
+                    medir o equilíbrio entre identificar transações suspeitas e evitar bloquear usuários legítimos.
+                </li>
+                <li>
+                    <strong>Filtros de spam:</strong>
+                    ajustar o modelo para capturar e-mails indesejados sem prejudicar mensagens importantes.
+                </li>
+            </ul>
+        </div>
+    </sec
